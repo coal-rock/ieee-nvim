@@ -40,6 +40,13 @@ require("lazy").setup({
 require("mason").setup()
 require("mason-lspconfig").setup()
 
+require("mason-lspconfig").setup_handlers {
+	-- Automatically configure LSPs
+	function (server_name)
+		require("lspconfig")[server_name].setup {}
+	end
+}
+
 -- Initialize nvim-tree
 require("nvim-tree").setup()
 
