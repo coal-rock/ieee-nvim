@@ -105,7 +105,7 @@ cmp.setup {
         -- Manually open completion menu with Ctrl+Space
         ['<C-Space>'] = cmp.mapping.complete {},
 
-        -- Accept copletion with Enter
+        -- Accept completion with Enter
         ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
