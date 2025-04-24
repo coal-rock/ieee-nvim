@@ -24,6 +24,9 @@ require("lazy").setup({
     -- Gruvbox, sexy ass theme
     "ellisonleao/gruvbox.nvim",
 
+    -- Tokyonight, close second colorscheme
+    "folke/tokyonight.nvim",
+
     -- Nvim-tree, file explorer
     "nvim-tree/nvim-tree.lua",
 
@@ -74,7 +77,8 @@ require("lazy").setup({
         build = ':TSUpdate',
     },
 
-    -- Todo-comments, gives us TODO: highlighting
+    -- Todo-comments, gives us:
+    -- TODO: highlighting
     { "folke/todo-comments.nvim", opts = {} },
 
     -- Lsp-lines, gives us inline error lense
@@ -241,6 +245,11 @@ vim.opt.shiftwidth = 0
 -- Disable virtual_text, this is replaced with Lsp-lines
 vim.diagnostic.config({ virtual_text = false })
 
+-- Disabe line-wrapping
+vim.cmd.set 'nowrap'
+
+-- Make scrolloff behavior mimic Helix
+vim.o.scrolloff = 5
 
 ---- Keybindings ----
 
@@ -266,7 +275,7 @@ vim.keymap.set('n', 'L', require("lsp_lines").toggle)
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
 
 -- Go to references
-vim.keymap.set('n', 'gr', vim.lsp.buf.definition)
+vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references)
 
 -- LSP-aware rename
 vim.keymap.set('n', '<space>cr', vim.lsp.buf.rename)
@@ -287,7 +296,14 @@ vim.keymap.set('n', '<leader>sD', require('telescope.builtin').diagnostics)
 vim.keymap.set('n', '<space>sg', require("telescope.builtin").live_grep)
 
 -- Search workspace files
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files)
+vim.keymap.set('n', '<space>sf', require('telescope.builtin').find_files)
+
+-- Search installed color schemes
+vim.keymap.set('n', '<space>sc', function()
+    require("telescope.builtin").colorscheme({
+        enable_preview = true,
+    })
+end)
 
 -- Maps <Esc> to normal mode from the terminal
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])
