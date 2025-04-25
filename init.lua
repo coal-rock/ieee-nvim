@@ -27,23 +27,13 @@ require("lazy").setup({
     "folke/tokyonight.nvim",
 
     -- Snacks, a collection of QoL plugins that add many features
-    { "folke/snacks.nvim" },
+    "folke/snacks.nvim",
 
     -- Fidget, gives us LSP status in bottm right corner
-    "j-hui/fidget.nvim",
+    { "j-hui/fidget.nvim",       opts = {} },
 
     -- ToggleTerm, nice quality of life wrapper for the default Neovim terminal
     { 'akinsho/toggleterm.nvim', opts = {} },
-
-    -- Neo-tree, file explorer
-    {
-        "nvim-neo-tree/neo-tree.nvim",
-        opts = {},
-        dependencies = {
-            "MunifTanjim/nui.nvim",
-            "nvim-lua/plenary.nvim",
-        }
-    },
 
     -- Pretty icons
     "nvim-tree/nvim-web-devicons",
@@ -103,8 +93,12 @@ require("lazy").setup({
 
 ---- Plugin Setup ----
 
--- Configure dashbord
+-- Configure snacks
 require("snacks").setup {
+    -- Enable file explorer
+    explorer = { enabled = true },
+
+    -- Configure + enable dashboard
     dashboard = {
         formats = {
             header = {
@@ -307,10 +301,10 @@ vim.keymap.set('n', 'U', vim.cmd.redo)
 -- Stop highlighting search after pressing "escape"
 vim.keymap.set('n', '<Esc>', function() vim.cmd 'noh' end)
 
--- Toggle nvim-tree with Space + f
-vim.keymap.set('n', '<space>f', function() vim.cmd "Neotree toggle" end)
+-- Toggle Snacks-explorer with Space + f
+vim.keymap.set('n', '<space>f', Snacks.explorer.open)
 
--- Toggle terminal with Space + y
+-- Toggle terminal with Space + t
 vim.keymap.set('n', '<space>t', function() vim.cmd "ToggleTerm" end)
 
 -- Peek definition with Shift+K
