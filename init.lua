@@ -18,25 +18,40 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-
 ---- Plugin Installation ----
 require("lazy").setup({
-    -- Gruvbox, sexy ass theme
+    -- Gruvbox, sexy ass colorscheme
     "ellisonleao/gruvbox.nvim",
 
     -- Tokyonight, close second colorscheme
     "folke/tokyonight.nvim",
 
-    -- Nvim-tree, file explorer
-    "nvim-tree/nvim-tree.lua",
+    -- Snacks, a collection of QoL plugins that add many features
+    { "folke/snacks.nvim" },
+
+    -- Fidget, gives us LSP status in bottm right corner
+    "j-hui/fidget.nvim",
+
+    -- ToggleTerm, nice quality of life wrapper for the default Neovim terminal
+    { 'akinsho/toggleterm.nvim', opts = {} },
+
+    -- Neo-tree, file explorer
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        opts = {},
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+        }
+    },
+
+    -- Pretty icons
+    "nvim-tree/nvim-web-devicons",
 
     -- Mason, used for LSP installation
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
-
-    -- Gives us LSP status updates in the bottom-right corner
-    { 'j-hui/fidget.nvim',             tag = 'legacy',                            opts = {} },
 
     -- Telescope, a "fuzzy finder" - does many things
     'nvim-telescope/telescope.nvim',
@@ -87,6 +102,46 @@ require("lazy").setup({
 
 
 ---- Plugin Setup ----
+
+-- Configure dashbord
+require("snacks").setup {
+    dashboard = {
+        formats = {
+            header = {
+                '░▒▓█▓▒░ ░▒▓████████▓▒░ ░▒▓████████▓▒░ ░▒▓████████▓▒░\n' ..
+                '░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░       \n' ..
+                '░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░       \n' ..
+                '░▒▓█▓▒░ ░▒▓██████▓▒░   ░▒▓██████▓▒░   ░▒▓██████▓▒░  \n' ..
+                '░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░       \n' ..
+                '░▒▓█▓▒░ ░▒▓█▓▒░        ░▒▓█▓▒░        ░▒▓█▓▒░       \n' ..
+                '░▒▓█▓▒░ ░▒▓████████▓▒░ ░▒▓████████▓▒░ ░▒▓████████▓▒░',
+                align = "center"
+            }
+        },
+        sections = {
+            { section = "header" },
+            { icon = " ", title = "Actions", section = "keys", indent = 2, padding = 1 },
+            { section = "startup" },
+            {
+                title = "“So, you can continue to use your arrow keys and mouse to navigate, but make no mistake...",
+                align = "center",
+                padding = { 0, 5 },
+            },
+            {
+                title = "there is no faster way to edit text than through vi/vim”",
+                align = "center",
+                padding = { 1, 0 },
+
+            },
+            {
+                title = "-Phipps",
+                align = "center",
+
+            },
+        },
+    },
+}
+
 
 -- Initialize Mason
 require("mason").setup()
@@ -181,9 +236,6 @@ require("mason-lspconfig").setup_handlers {
     end
 }
 
--- Initialize nvim-tree
-require("nvim-tree").setup()
-
 -- Configure telescope
 require('telescope').setup {
     defaults = {
@@ -204,10 +256,6 @@ require('telescope').setup {
 
 
 ---- Basic Configuration ----
-
--- Disable netrw (default nvim file explorer)
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
 
 -- Enable lazydev
 vim.g.lazydev_enabled = true
@@ -260,7 +308,10 @@ vim.keymap.set('n', 'U', vim.cmd.redo)
 vim.keymap.set('n', '<Esc>', function() vim.cmd 'noh' end)
 
 -- Toggle nvim-tree with Space + f
-vim.keymap.set('n', '<space>f', function() vim.cmd 'NvimTreeToggle' end)
+vim.keymap.set('n', '<space>f', function() vim.cmd "Neotree toggle" end)
+
+-- Toggle terminal with Space + y
+vim.keymap.set('n', '<space>t', function() vim.cmd "ToggleTerm" end)
 
 -- Peek definition with Shift+K
 vim.keymap.set('n', 'K', vim.lsp.buf.hover)
@@ -318,3 +369,5 @@ end, {})
 
 ---- Format on write ----
 vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+
+---- LSP-Specific Configuration ----
